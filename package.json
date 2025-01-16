@@ -10,7 +10,8 @@
   },
   "devDependencies": {
     "typescript": "~5.7.2",
-    "vite": "^6.0.7"
+    "vite": "^6.0.7",
+    "vite-plugin-static-copy": "^2.2.0"
   },
   "dependencies": {
     "@itk-wasm/image-io": "^1.4.0",

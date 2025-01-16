@@ -6,11 +6,9 @@ import vtkImageSliceActor from '@kitware/vtk.js/Rendering/Core/ImageSlice';
 import vtkImageMapper from '@kitware/vtk.js/Rendering/Core/ImageMapper';
 import vtkITKHelper from '@kitware/vtk.js/Common/DataModel/ITKHelper';
 
-// setup pipeline url to retrieve itk related resources (js files, worker files, wasm files)
-// this should work for other packages too, but if you are working with multiple @itk-wasm pakcages at the same time, you should use the version from itk-wasm, and yes it works
-setPipelinesBaseUrl(
-  new URL('../node_modules/@itk-wasm/image-io/dist/pipelines', import.meta.url)
-);
+// setup pipeline url to retrieve itk related resources (js files, worker files, wasm files), we are using ralative path here because of the config in vite.config.ts
+// this should work for other packages too, but if you are working with multiple @itk-wasm pakcages at the same time, you should use the version from itk-wasm package
+setPipelinesBaseUrl('/itk');
 
 // the official example use a file input for local files, but did not give example on how to load remote files
 // here we use a simple http fetch to get a remote png here, but it could definitely be extended for other senarios
