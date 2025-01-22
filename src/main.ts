@@ -1,7 +1,9 @@
 import { readImage, setPipelinesBaseUrl } from '@itk-wasm/image-io';
 
 import '@kitware/vtk.js/Rendering/Profiles/All';
-import vtkFullScreenRenderWindow from '@kitware/vtk.js/Rendering/Misc/FullScreenRenderWindow';
+import vtkRenderWindow from '@kitware/vtk.js/Rendering/Core/RenderWindow';
+import vtkOpenGLRenderWindow from "@kitware/vtk.js/Rendering/OpenGL/RenderWindow";
+import vtkRenderer from "@kitware/vtk.js/Rendering/Core/Renderer";
 import vtkImageSliceActor from '@kitware/vtk.js/Rendering/Core/ImageSlice';
 import vtkImageMapper from '@kitware/vtk.js/Rendering/Core/ImageMapper';
 import vtkITKHelper from '@kitware/vtk.js/Common/DataModel/ITKHelper';
@@ -27,11 +29,20 @@ fetch('screenshot.png')
   })
   .then(imageData => {
     // typical image rendering process with vtk
-    const fullScreenRenderer = vtkFullScreenRenderWindow.newInstance({
-      background: [0, 0, 0]
-    });
-    const renderer = fullScreenRenderer.getRenderer();
-    const renderWindow = fullScreenRenderer.getRenderWindow();
+    const renderWindow = vtkRenderWindow.newInstance();
+
+    const renderView = vtkOpenGLRenderWindow.newInstance();
+    renderView.setContainer(document.querySelector('#app'));
+    renderView.setSize(512, 512);
+    const canvas = renderView.getCanvas();
+    if (canvas) {
+      canvas.style.width = '256px';
+      canvas.style.height = '512px';
+    }
+    renderWindow.addView(renderView);
+
+    const renderer = vtkRenderer.newInstance();
+    renderWindow.addRenderer(renderer);
 
     const actor = vtkImageSliceActor.newInstance();
     const mapper = vtkImageMapper.newInstance();
